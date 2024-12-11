@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+
+    table {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+
+    #container {
+      height: 180px;
+    }
+    
+    th, td {
+      border: 1px solid black;
+      padding: 3px;
+      width: 30px;
+      text-align: center;
+    }
+
+    th {
+      background-color: antiquewhite;
+    }
+
+    td:last-child {
+      background-color: red;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+  <h1 id="calendar">Calendar for <span id="dateInfo"></span></h1>
+  <div id="container"></div>
+  <br>
+  <div>
+    <button onclick="createCalendar(container, globalYear,
+      globalMonth - 1)"><< prev</button>
+    <button onclick="createCalendar(container, globalYear, 
+      globalMonth + 1)">next >></button>
+  </div>
+  <br>
+  <button onclick="createCalendar(container, prompt('enter year', 2012),   
+     prompt('enter month', 9)-1)">select new date</button>
+    
+  <script>
+    let globalYear;
+    let globalMonth;
+    
+    function createCalendar(container, year, month) {
+
+      
+      let table = '<table id="table"><tr><th>MO</th><th>TU</th><th>WE</th>'+
+        '<th>TH</th><th>FR</th><th>SA</th><th>SU</th></tr>'
+      let currDate = new Date(year,  month, 1);
+
+      globalYear = currDate.getFullYear();
+      globalMonth = currDate.getMonth();
+
+      let currweekDay = currDate.getDay() || 7;
+      let startMonth = currDate.getMonth()
+      
+      table += '<tr>' + '<td></td>'.repeat(currweekDay -1);
+        
+      let i = 1;
+
+      while(true) {
+        table += '<td>' + i + '</td>';
+        i++; 
+        if (currweekDay == 7 ) {
+          table += '</tr><tr>' ;
+            currweekDay  = 1;
+          }else {currweekDay++}
+
+        currDate.setDate(currDate.getDate()+1)
+        if (currDate.getMonth() !== startMonth) {
+          break
+        };
+      }
+      
+      table += '<td></td>'.repeat(currweekDay == 1 ? 0 : 7 + 1 - currweekDay) +  '</tr></table';
+      document.getElementById('container').innerHTML =  table;
+      document.getElementById('dateInfo').textContent = globalYear + '-' + (Number(globalMonth) + 1);
+
+    }
+
+    let date = new Date();
+
+    createCalendar(container, date.getFullYear(), date.getMonth())
+
+  </script>
+</body>
+</html>
